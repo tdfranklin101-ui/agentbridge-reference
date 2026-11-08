@@ -1,0 +1,11 @@
+[project]
+name = "agentbridge-reference"
+version = "0.1.0"
+description = "Experimental reference implementation for opt-in agent-service integration"
+requires-python = ">=3.12"
+license = "MIT"
+authors = [{ name = "Terry Franklin" }]
+dependencies = []
+
+[tool.uv]
+package = false
