@@ -1,0 +1,108 @@
+{
+  "note": "All identities and data are fictional. The approval signature is a nonfunctional placeholder; the host must generate its own.",
+  "capability": {
+    "type": "capability",
+    "protocol_version": "0.1",
+    "service_id": "fictional-merchant-service",
+    "capabilities": ["quote", "human_approval", "payment_status_check", "fulfillment_result"],
+    "authentication": {
+      "scheme": "host-configured bearer credential"
+    }
+  },
+  "request": {
+    "type": "request",
+    "protocol_version": "0.1",
+    "message_id": "example-message-001",
+    "request_id": "example-request-001",
+    "peer_id": "fictional-requesting-agent",
+    "action": "quote",
+    "item": {
+      "sku": "DEMO-ITEM",
+      "quantity": 1
+    },
+    "idempotency_key": "example-idempotency-001",
+    "issued_at": 2000000000,
+    "expires_at": 2000000300
+  },
+  "quote": {
+    "type": "quote",
+    "protocol_version": "0.1",
+    "request_id": "example-request-001",
+    "quote_id": "example-quote-001",
+    "sku": "DEMO-ITEM",
+    "quantity": 1,
+    "amount_cents": 1250,
+    "currency": "usd",
+    "expires_at": 2000000300
+  },
+  "approval": {
+    "type": "approval",
+    "protocol_version": "0.1",
+    "approval_id": "example-approval-001",
+    "request_id": "example-request-001",
+    "peer_id": "fictional-requesting-agent",
+    "action": "fulfill",
+    "quote_id": "example-quote-001",
+    "amount_cents": 1250,
+    "currency": "usd",
+    "approver_id": "fictional-human-operator",
+    "issued_at": 2000000000,
+    "expires_at": 2000000300,
+    "signature": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "fulfillment_request": {
+    "type": "request",
+    "protocol_version": "0.1",
+    "message_id": "example-message-002",
+    "request_id": "example-request-001",
+    "peer_id": "fictional-requesting-agent",
+    "action": "fulfill",
+    "approval": {
+      "type": "approval",
+      "protocol_version": "0.1",
+      "approval_id": "example-approval-001",
+      "request_id": "example-request-001",
+      "peer_id": "fictional-requesting-agent",
+      "action": "fulfill",
+      "quote_id": "example-quote-001",
+      "amount_cents": 1250,
+      "currency": "usd",
+      "approver_id": "fictional-human-operator",
+      "issued_at": 2000000000,
+      "expires_at": 2000000300,
+      "signature": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "payment_status_reference": "SIMULATED-EXAMPLE-ONLY",
+    "issued_at": 2000000000,
+    "expires_at": 2000000300
+  },
+  "payment_status": {
+    "type": "payment_status",
+    "protocol_version": "0.1",
+    "request_id": "example-request-001",
+    "reference": "SIMULATED-EXAMPLE-ONLY",
+    "mode": "simulated",
+    "status": "simulated_succeeded",
+    "verified": false,
+    "amount_cents": 1250,
+    "currency": "usd"
+  },
+  "fulfillment": {
+    "type": "fulfillment",
+    "protocol_version": "0.1",
+    "request_id": "example-request-001",
+    "approval_id": "example-approval-001",
+    "status": "simulated_only",
+    "delivered": false,
+    "payment_mode": "simulated",
+    "payment_verified": false,
+    "result_reference": "SIMULATED-EXAMPLE-ONLY"
+  },
+  "error": {
+    "type": "error",
+    "protocol_version": "0.1",
+    "code": "unauthorized",
+    "message": "Valid peer authentication is required.",
+    "retryable": false
+  }
+}
