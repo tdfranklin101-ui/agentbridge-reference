@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/agentbridge-reference/v0.1/messages.schema.json",
+  "title": "AgentBridge Reference Messages",
+  "description": "Experimental, transport-neutral message contract. The example.invalid identifier is intentionally non-routable.",
+  "oneOf": [
+    { "$ref": "#/$defs/capability" },
+    { "$ref": "#/$defs/request" },
+    { "$ref": "#/$defs/fulfillmentRequest" },
+    { "$ref": "#/$defs/quote" },
+    { "$ref": "#/$defs/approval" },
+    { "$ref": "#/$defs/paymentStatus" },
+    { "$ref": "#/$defs/fulfillment" },
+    { "$ref": "#/$defs/error" }
+  ],
+  "$defs": {
+    "capability": {
+      "type": "object",
+      "required": ["type", "protocol_version", "service_id", "capabilities", "authentication"],
+      "properties": {
+        "type": { "const": "capability" },
+        "protocol_version": { "const": "0.1" },
+        "service_id": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "capabilities": { "type": "array", "items": { "type": "string", "maxLength": 80 }, "maxItems": 32 },
+        "authentication": { "type": "object", "required": ["scheme"], "properties": { "scheme": { "const": "host-configured bearer credential" } }, "additionalProperties": false }
+      },
+      "additionalProperties": false
+    },
+    "request": {
+      "type": "object",
+      "required": ["type", "protocol_version", "message_id", "request_id", "peer_id", "action", "item", "idempotency_key", "issued_at", "expires_at"],
+      "properties": {
+        "type": { "const": "request" },
+        "protocol_version": { "const": "0.1" },
+        "message_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "request_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "peer_id": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "action": { "const": "quote" },
+        "item": { "type": "object", "required": ["sku", "quantity"], "properties": { "sku": { "type": "string", "minLength": 1, "maxLength": 80 }, "quantity": { "type": "integer", "minimum": 1, "maximum": 100 } }, "additionalProperties": false },
+        "idempotency_key": { "type": "string", "minLength": 8, "maxLength": 128 },
+        "issued_at": { "type": "integer", "minimum": 0 },
+        "expires_at": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "fulfillmentRequest": {
+      "type": "object",
+      "required": ["type", "protocol_version", "message_id", "request_id", "peer_id", "action", "approval", "payment_status_reference", "issued_at", "expires_at"],
+      "properties": {
+        "type": { "const": "request" },
+        "protocol_version": { "const": "0.1" },
+        "message_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "request_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "peer_id": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "action": { "const": "fulfill" },
+        "approval": { "$ref": "#/$defs/approval" },
+        "payment_status_reference": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "issued_at": { "type": "integer", "minimum": 0 },
+        "expires_at": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "quote": {
+      "type": "object",
+      "required": ["type", "protocol_version", "request_id", "quote_id", "sku", "quantity", "amount_cents", "currency", "expires_at"],
+      "properties": {
+        "type": { "const": "quote" },
+        "protocol_version": { "const": "0.1" },
+        "request_id": { "type": "string", "maxLength": 128 },
+        "quote_id": { "type": "string", "maxLength": 128 },
+        "sku": { "type": "string", "maxLength": 80 },
+        "quantity": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "amount_cents": { "type": "integer", "minimum": 0 },
+        "currency": { "type": "string", "pattern": "^[a-z]{3}$" },
+        "expires_at": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "approval": {
+      "type": "object",
+      "required": ["type", "protocol_version", "approval_id", "request_id", "peer_id", "action", "quote_id", "amount_cents", "currency", "approver_id", "issued_at", "expires_at", "signature"],
+      "properties": {
+        "type": { "const": "approval" },
+        "protocol_version": { "const": "0.1" },
+        "approval_id": { "type": "string", "maxLength": 128 },
+        "request_id": { "type": "string", "maxLength": 128 },
+        "peer_id": { "type": "string", "maxLength": 80 },
+        "action": { "const": "fulfill" },
+        "quote_id": { "type": "string", "maxLength": 128 },
+        "amount_cents": { "type": "integer", "minimum": 0 },
+        "currency": { "type": "string", "pattern": "^[a-z]{3}$" },
+        "approver_id": { "type": "string", "maxLength": 80 },
+        "issued_at": { "type": "integer", "minimum": 0 },
+        "expires_at": { "type": "integer", "minimum": 0 },
+        "signature": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      },
+      "additionalProperties": false
+    },
+    "paymentStatus": {
+      "type": "object",
+      "description": "Host-produced status result. Never accept this object or its verified flag as an agent-supplied payment claim.",
+      "required": ["type", "protocol_version", "request_id", "reference", "mode", "status", "verified", "amount_cents", "currency"],
+      "properties": {
+        "type": { "const": "payment_status" },
+        "protocol_version": { "const": "0.1" },
+        "request_id": { "type": "string", "maxLength": 128 },
+        "reference": { "type": "string", "maxLength": 160 },
+        "mode": { "enum": ["simulated", "provider_verified"] },
+        "status": { "enum": ["simulated_succeeded", "succeeded", "pending", "failed"] },
+        "verified": { "type": "boolean" },
+        "amount_cents": { "type": "integer", "minimum": 0 },
+        "currency": { "type": "string", "pattern": "^[a-z]{3}$" }
+      },
+      "additionalProperties": false
+    },
+    "fulfillment": {
+      "type": "object",
+      "required": ["type", "protocol_version", "request_id", "approval_id", "status", "delivered", "payment_mode", "payment_verified", "result_reference"],
+      "properties": {
+        "type": { "const": "fulfillment" },
+        "protocol_version": { "const": "0.1" },
+        "request_id": { "type": "string", "maxLength": 128 },
+        "approval_id": { "type": "string", "maxLength": 128 },
+        "status": { "enum": ["simulated_only", "fulfilled"] },
+        "delivered": { "type": "boolean" },
+        "payment_mode": { "enum": ["simulated", "provider_verified"] },
+        "payment_verified": { "type": "boolean" },
+        "result_reference": { "type": "string", "maxLength": 160 }
+      },
+      "additionalProperties": false
+    },
+    "error": {
+      "type": "object",
+      "required": ["type", "protocol_version", "code", "message", "retryable"],
+      "properties": {
+        "type": { "const": "error" },
+        "protocol_version": { "const": "0.1" },
+        "code": { "enum": ["invalid_message", "unsupported_version", "unauthorized", "forbidden", "expired", "replay", "conflict", "rate_limited", "payment_unverified", "not_found"] },
+        "message": { "type": "string", "maxLength": 160 },
+        "retryable": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    }
+  }
+}
