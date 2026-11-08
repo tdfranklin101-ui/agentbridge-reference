@@ -13,6 +13,10 @@ this code on GitHub makes it available to developers; it does not install it
 into any branded service or merchant website. No named brand has integrated,
 endorsed, or certified this project.
 
+**Release status: UNRELEASED.** Local verification passed, but the connected
+GitHub permission did not allow adding the Actions workflow, so remote CI
+could not run. No version tag or GitHub prerelease has been created.
+
 ## Quick start
 
 Requirements: Python 3.12 or newer. The demo and tests use only the Python
