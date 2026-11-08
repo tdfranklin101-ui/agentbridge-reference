@@ -91,7 +91,8 @@ must be implemented and tested by the host.
 
 The release declares no third-party runtime or development dependencies, so
 there are no third-party package licenses or dependency advisories in the
-release dependency graph. The local release source and secret scan, the
-GitHub Actions result, and the clean-clone test result will be recorded before
-a versioned release is created. If a remote check cannot run, this repository
-must remain marked unreleased and no release tag should be made.
+release dependency graph. The local release source and secret scans and
+clean-clone test passed. GitHub Actions could not run because the connected
+authorization cannot add `.github/workflows/tests.yml`; the repository is
+explicitly marked unreleased. Do not create a version tag until remote CI and
+an independent public clone pass.
