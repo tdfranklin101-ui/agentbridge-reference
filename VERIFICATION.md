@@ -89,10 +89,4 @@ Production transport, TLS, timeouts, bounded retries, endpoint restrictions,
 durable idempotency, payment-provider signature verification, and fulfillment
 must be implemented and tested by the host.
 
-The release declares no third-party runtime or development dependencies, so
-there are no third-party package licenses or dependency advisories in the
-release dependency graph. The local release source and secret scans and
-clean-clone test passed. GitHub Actions could not run because the connected
-authorization cannot add `.github/workflows/tests.yml`; the repository is
-explicitly marked unreleased. Do not create a version tag until remote CI and
-an independent public clone pass.
+The public `main` commit `c668142aed09312a0c094e48e178025aeb2c61bd` was independently cloned: all 16 tests passed, compile and network-free demo checks passed, and a targeted credential-pattern scan found zero candidates. Its GitHub Actions run succeeded. The reviewed workflow is `.github/workflows/Tests.yml`, with pinned actions and read-only repository permissions. Check GitHub Actions for verification of later commits. These checks do not establish real merchant compatibility or authorize restarting the discontinued hosted service.
