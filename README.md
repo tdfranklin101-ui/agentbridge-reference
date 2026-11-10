@@ -13,9 +13,7 @@ this code on GitHub makes it available to developers; it does not install it
 into any branded service or merchant website. No named brand has integrated,
 endorsed, or certified this project.
 
-**Release status: UNRELEASED.** Local verification passed, but the connected
-GitHub permission did not allow adding the Actions workflow, so remote CI
-could not run. No version tag or GitHub prerelease has been created.
+**Release status: Experimental reference.** This repository contains source code and a simulation-only demo. It is not a hosted service, production integration, merchant installation, or evidence of live transactions. See GitHub Actions and Releases for the current verification and version history.
 
 ## Quick start
 
