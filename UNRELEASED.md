@@ -1,17 +1,5 @@
-# Unreleased
+# Historical pre-release status
 
-This repository contains an experimental source snapshot, not a verified
-versioned release. No v0.1.0 tag or GitHub prerelease exists.
+This note records the repository state before the GitHub Actions workflow was added and its tests passed. That release gate is now resolved; consult the GitHub Actions and Releases pages for current verification and version history.
 
-Local tests and targeted scans passed. The connected GitHub integration could
-create the public repository and commit source files, but GitHub rejected the
-`.github/workflows/tests.yml` upload. Its current authorization does not
-include workflow-file write permission, so remote CI and the final release
-gates could not run.
-
-To complete the release, reconnect the GitHub integration in Replit and grant
-the workflow permission needed to add the reviewed read-only CI file. Then run
-CI on the exact commit, independently clone the public repository, repeat the
-demo, and only after those checks pass create the v0.1.0 annotated tag and
-GitHub prerelease. Until then, do not describe this repository as a verified
-release.
+This source remains an experimental reference only. It is not the hosted AgentBridge service, a production integration, evidence of live merchant use, or authorization to restart the discontinued service.
